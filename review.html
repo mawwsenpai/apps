@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Detail Makanan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500&family=Montserrat:wght@300;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/data.js"></script>
+</head>
+<body>
+
+<a href="home.html" class="back-button-top">←</a>
+
+<div class="photo-carousel" id="photo-carousel">
+    </div>
+    
+<div class="indicators" id="indicators">
+    </div>
+
+<div class="info-wrapper">
+    <p id="item-category" class="item-category"></p>
+    <h1 id="item-name"></h1>
+    <p id="item-price"></p>
+    <p id="item-description" class="item-description"></p>
+        
+    <a id="wa-link" href="#" target="_blank" class="wa-button">
+        Pesan Via WhatsApp
+    </a>
+</div>
+
+<script>
+    // FUNGSI UTILITY
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    document.addEventListener('copy', event => { event.preventDefault(); alert('Akses Salin Dilarang.'); });
+
+    // 1. Gabungkan data nested
+    let allItems = {};
+    for (const category in menuDataNested) {
+        menuDataNested[category].forEach(item => {
+            item.kategori = category; 
+            allItems[item.id] = item;
+        });
+    }
+    
+    // 2. Ambil data item
+    const urlParams = new URLSearchParams(window.location.search);
+    const itemId = urlParams.get('item');
+    const itemData = allItems[itemId];
+    const WA_NUM = typeof WHATSAPP_NUMBER !== 'undefined' ? WHATSAPP_NUMBER : '6281234567890';
+
+    if (itemData) {
+        // 3. Tampilkan Data Utama
+        document.getElementById('item-name').textContent = itemData.nama;
+        document.getElementById('item-price').textContent = itemData.harga;
+        document.getElementById('item-category').textContent = itemData.kategori.toUpperCase();
+        document.getElementById('item-description').textContent = itemData.deskripsi;
+        document.getElementById('page-title').textContent = itemData.nama + " - Warung Geulis";
+
+        // 4. Generate Carousel FOTO
+        const carouselEl = document.getElementById('photo-carousel');
+        const indicatorsEl = document.getElementById('indicators');
+        
+        itemData.foto.forEach((photoPath, index) => {
+            const item = document.createElement('div');
+            item.classList.add('carousel-item');
+            item.innerHTML = `<img src="${photoPath}" alt="${itemData.nama} ${index + 1}" class="item-image">`;
+            carouselEl.appendChild(item);
+
+            const dot = document.createElement('span');
+            dot.classList.add('dot');
+            if (index === 0) dot.classList.add('active');
+            indicatorsEl.appendChild(dot);
+        });
+        
+        // 5. Fungsionalitas Carousel
+        const updateIndicators = () => {
+            const index = Math.round(carouselEl.scrollLeft / carouselEl.clientWidth);
+            const dots = indicatorsEl.querySelectorAll('.dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        };
+        carouselEl.addEventListener('scroll', updateIndicators);
+
+
+        // 6. Buat Link WhatsApp & CEK STOK
+        const waButton = document.getElementById('wa-link');
+        
+        if (itemData.stok === 'kosong') {
+            // Jika stok kosong
+            waButton.href = '#';
+            waButton.textContent = 'Habis Terjual';
+            waButton.classList.add('wa-button-disabled'); // Tambah kelas nonaktif
+            waButton.addEventListener('click', (e) => e.preventDefault()); // Cegah klik
+        } else {
+            // Jika stok tersedia
+            const encodedMessage = encodeURIComponent(itemData.wa_message);
+            const waLink = `https://wa.me/${WA_NUM}?text=${encodedMessage}`;
+            waButton.href = waLink;
+        }
+
+    } else {
+        // Halaman Error 404
+        document.body.innerHTML = `
+            <div class="error-page">
+                <h1>404 - Menu Tidak Ditemukan</h1>
+                <p>Mohon maaf, halaman yang Anda cari tidak tersedia.</p>
+                <a href="home.html" class="wa-button">← Kembali ke Menu</a>
+            </div>
+        `;
+    }
+</script>
+</body>
+</html>

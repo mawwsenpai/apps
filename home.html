@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | Warung Geulis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500&family=Montserrat:wght@300;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css"> 
+    <script src="js/data.js"></script> 
+</head>
+<body>
+
+<div class="page-wrapper">
+
+    <div class="header">
+        <h1>WARUNG GEULIS</h1>
+        <p>Katalog Menu Pilihan Terlengkap & Modern Aesthetic</p>
+    </div>
+
+    <div id="menu-list">
+        </div>
+
+</div>
+
+<script>
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    document.addEventListener('copy', event => { event.preventDefault(); alert('Akses Salin Dilarang.'); });
+    
+    const menuContainer = document.getElementById('menu-list');
+    const menuList = menuDataNested;
+    
+    function createMenuHTML() {
+        let html = '';
+        // Ubah urutan kategori di sini jika perlu
+        const categoryOrder = ["Hidangan Utama", "Nasi & Mie Spesial", "Camilan & Snack", "Minuman"];
+        
+        categoryOrder.forEach(category => {
+            if (menuList[category]) {
+                html += `<div class="menu-section">`;
+                html += `<h3>${category.toUpperCase()}</h3>`; 
+                
+                menuList[category].forEach(item => { 
+                    const itemId = item.id;
+                    // Cek jika foto ada (untuk link review)
+                    const isAvailable = item.foto && item.foto.length > 0; 
+                    // Cek stok
+                    const isOutOfStock = item.stok === 'kosong';
+
+                    let linkClass = "item-link";
+                    let linkHref = `href="${isAvailable ? 'review.html?item=' + itemId : '#'}"`;
+
+                    // Jika stok kosong
+                    if (isOutOfStock) {
+                        linkClass += " item-kosong"; // Tambah kelas CSS
+                        linkHref = `href="#"`;      // Ubah link agar tidak kemana-mana
+                    }
+                    
+                    html += `
+                        <div class="menu-item">
+                            <a ${linkHref} class="${linkClass}">
+                                <span class="item-name">${item.nama}</span>
+                                <span class="item-price">${item.harga}</span>
+                            </a>
+                        </div>
+                    `;
+                });
+
+                html += `</div>`;
+            }
+        });
+
+        menuContainer.innerHTML = html;
+    }
+
+    // --- EKSEKUSI ---
+    
+    // 1. Buat HTML menunya
+    createMenuHTML();
+
+    // 2. Tambahkan listener untuk notifikasi "Habis terjual"
+    const soldOutItems = document.querySelectorAll('.item-kosong');
+    soldOutItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault(); // Mencegah link '#' melompat ke atas
+            alert('Habis terjual');
+        });
+    });
+</script>
+</body>
+</html>
