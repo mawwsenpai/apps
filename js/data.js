@@ -6,7 +6,7 @@ const menuDataNested = {
     {
       id: "tongseng_nasi",
       nama: "Tongseng + Nasi",
-      harga: "Rp 35.000",
+      harga: "Rp 999.000",
       stok: "tersedia",
       deskripsi: "Deskripsi untuk Tongseng + Nasi akan segera hadir. Silakan tanyakan pada kami untuk info lebih lanjut.",
       foto: ["img/menu/nasi.png"], 
@@ -15,7 +15,7 @@ const menuDataNested = {
     {
       id: "tengkleng_nasi",
       nama: "Tengkleng + Nasi",
-      harga: "Rp 35.000",
+      harga: "Rp 9.995.000",
       stok: "kosong",
       deskripsi: "Deskripsi untuk Tengkleng + Nasi akan segera hadir. Silakan tanyakan pada kami untuk info lebih lanjut.",
       foto: [],
@@ -226,8 +226,17 @@ const menuDataNested = {
       deskripsi: "Deskripsi untuk Telor Dadar akan segera hadir. Silakan tanyakan pada kami untuk info lebih lanjut.",
       foto: [],
       wa_message: "Halo, saya mau pesan Telor Dadar."
+    },
+    {
+      id: "lalab",
+      nama: "sayuran",
+      harga: "Rp 1.999.000",
+      stok: "tersedia",
+      deskripsi: "sayur yang langsung di petik dari kebun pak wahyu",
+      foto: ["sayur.png"],
+      wa_message: "Halo, saya mau pesan Telor Dadar."
     }
-  ],
+    ],
   
   // KATEGORI 4: MINUMAN
   "Minuman": [
