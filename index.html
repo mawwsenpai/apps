@@ -14,7 +14,7 @@
 
     <div class="header">
         <h1>WARUNG GEULIS</h1>
-        <p>Katalog Menu Pilihan Terlengkap & Modern Aesthetic</p>
+        <p>Makanan khas Sunda, alamat: jalan ass</p>
     </div>
 
     <div id="menu-list">
@@ -31,7 +31,6 @@
     
     function createMenuHTML() {
         let html = '';
-        // Ubah urutan kategori di sini jika perlu
         const categoryOrder = ["Hidangan Utama", "Nasi & Mie Spesial", "Camilan & Snack", "Minuman"];
         
         categoryOrder.forEach(category => {
@@ -72,16 +71,13 @@
         menuContainer.innerHTML = html;
     }
 
-    // --- EKSEKUSI ---
-    
-    // 1. Buat HTML menunya
+
     createMenuHTML();
 
-    // 2. Tambahkan listener untuk notifikasi "Habis terjual"
     const soldOutItems = document.querySelectorAll('.item-kosong');
     soldOutItems.forEach(item => {
         item.addEventListener('click', (e) => {
-            e.preventDefault(); // Mencegah link '#' melompat ke atas
+            e.preventDefault(); 
             alert('Habis terjual');
         });
     });
